@@ -1,0 +1,39 @@
+<div id="wrapper">
+  <div class="errors">
+    <% if flash[:error] %>
+      <% flash[:errors].each do |error| %>
+      <p><%= error %></p>
+      <% end %>
+    <% end %>
+
+    <% if flash[:messages] %>
+      <% flash[:messages].each do |message| %>
+      <p><%= message %></p>
+      <% end %>
+    <% end %>
+  </div>
+  <div id="body">
+    <h1>Welcome!</h1>
+    <div id="registration">
+      <h2>Register!</h2>
+      <form action="/register" method="POST">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <label>First Name:</label><input type="text" name="user[first_name]">
+        <label>Last Name:</label><input type="text" name="user[last_name]">
+        <label>Email:</label><input type="email" name="user[email]">
+        <label>Password:</label><input type="password" name="user[password]">
+        <label>Password Confirmation:</label><input type="password" name="user[password_confirm]">
+        <input type="submit" value="Register!">
+      </form>
+    </div>
+    <div id="login">
+      <h2>Log in!</h2>
+      <form action="/login" method="POST">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <label>Email:</label><input type="email" name="email">
+        <label>Password:</label><input type="password" name="password">
+        <input type="submit" value="Log in!">
+      </form>
+    </div>
+  </div>
+</div>
