@@ -1,4 +1,45 @@
 Rails.application.routes.draw do
+
+  root 'session#index'
+
+  # load loginreg page
+  get '/loginreg'=> 'session#loginreg'
+
+  # register or login process
+  post '/register' => 'users#create'
+  post '/login' => 'sessions#login'
+
+  # load the events
+  get '/events/:id' => 'events#main'
+  get '/events/:id/new' => 'events#new'
+  get '/events/:id/new2' => 'events#new2'
+
+  # create an event
+  post '/create' => 'events#create'
+
+  # show the event
+  get '/show/:id' => 'events#show'
+
+  # edit the event
+  get '/edit/:id' => 'events#edit'
+  patch '/edit/:id' => 'events#update'
+
+  # create item
+  post '/items' => 'items#create'
+  post '/guests' => 'attendees#add_guest'
+
+  # update bringing item to party
+  patch '/bring/:id' => 'items#bring'
+
+  # RSVP to party
+  post '/rsvp/:id' => 'users#going'
+
+  # delete an event
+  delete '/delete/:id' => 'events#delete'
+
+  # logout
+  get '/logout' => 'sessions#logout'
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,0 +1,87 @@
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAZGR5gGXpA271EV-DT6QlNS9sBOWhtSeU"></script>
+<script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
+<script src='//cdn.rawgit.com/printercu/google-maps-utility-library-v3-read-only/master/infobox/src/infobox_packed.js' type='text/javascript'></script>
+
+<!-- only if you need custom infoboxes -->
+
+<script>
+
+</script>
+
+<div id="wrapper">
+  <div id="header">
+    <h1>Welcome <%= @user.first_name %></h1>
+    <a href="/logout">Log Out</a>
+  </div>
+  <div id="main">
+    <a href="/events/<%= @user.id %>/new">CREATE AN EVENT</a>
+    <h3>Events Around You!</h3>
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Description</th>
+        <th>When</th>
+        <th>Where</th>
+        <th>Host</th>
+        <th>Attendees</th>
+        <th>Action</th>
+      </thead>
+      <tbody>
+        <% @event.each do |e| %>
+        <tr>
+          <td><a href="/show/<%= e.id %>"><%= e.name %></a></td>
+          <td><%= e.description %></td>
+          <td><%= e.when.strftime "%b/%-d/%Y %l:%M %p" %></td>
+          <td><%= e.where %></td>
+          <td><%= e.user.first_name %></td>
+          <td><%= e.attendee_count %></td>
+          <td><form action="/rsvp/<%= e.id %>" method="POST">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="hidden" name="attendee[event_id]" value="<%= e.id %>">
+            <input type="hidden" name="attendee[user_id]" value="<%= current_user.id %>">
+            <input type="submit" value="RSVP">
+          </form></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <!-- Google Maps API -->
+    <div id="map" style="width: 995px; height: 400px; border: 3px solid black; opacity: 1; filter: alpha(opacity=100);"></div>
+    <script type="text/javascript">
+      handler = Gmaps.build('Google');
+      handler.buildMap({provider: {}, internal:{id: 'map'}}, function(){
+        markers = handler.addMarkers(<%=raw_@hash.to_json%>);
+        handler.bounds.extendWith(markers);
+        handler.fitMapToBounds();
+      });
+    </script>
+
+    <h3>Events You're Hosting</h3>
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Description</th>
+        <th>When</th>
+        <th>Where</th>
+        <th>Attendees</th>
+        <th>Action</th>
+      </thead>
+      <tbody>
+        <% @hosting.each do |h| %>
+        <tr>
+          <td><a href="/show/<%= h.id %>"><%= h.name %></a></td>
+          <td><%= h.description %></td>
+          <td><%= h.when.strftime "%b/%-d/%Y %l:%M %p" %></td>
+          <td><%= h.where %></td>
+          <td><%= h.attendee_count %></td>
+          <td>
+            <a href="/edit/<%= h.id %>">EDIT</a>
+            <a href="/delete/<%= h.id %>" data-method="delete">DELETE</a>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
