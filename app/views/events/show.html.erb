@@ -19,7 +19,7 @@
     <p><%= @event.when.strftime "%b/%-d/%Y %l:%M %p" %></p>
 
     <h3>Attendees:</h3>
-    <% attendees.each do |a| %>
+    <% @attendees.each do |a| %>
     <p><%= a.first_name %> <%= a.last_name %> <%= a.email %></p>
     <% end %>
 
@@ -41,7 +41,7 @@
       </form>
       <% end %>
       <!-- show items that the user is bringing to this party -->
-      <% if i.user_id == curent_user.id && i.status == 1 %>
+      <% if i.user_id == current_user.id && i.status == 1 %>
       <p>You're bringing it!</p>
       <% end %>
     </div>
@@ -79,5 +79,5 @@
     });
     marker.setMap(map);
   }
-  google.maps.event.addDomListener(window, 'load', initalize);
+  google.maps.event.addDomListener(window, 'load', initialize);
 </script>

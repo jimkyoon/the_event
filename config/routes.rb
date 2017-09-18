@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
-  root 'session#index'
+  root 'sessions#index'
 
   # load loginreg page
-  get '/loginreg'=> 'session#loginreg'
+  get '/loginreg'=> 'sessions#loginreg'
 
   # register or login process
   post '/register' => 'users#create'
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   # logout
   get '/logout' => 'sessions#logout'
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
