@@ -1,0 +1,18 @@
+<div id="wrapper">
+  <h1>Update <%= @event.name %>!</h1>
+
+  <form action="/edit/<%= @event.id %>" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="_method" value="patch">
+    <input type="hidden" name="event[Uuser_id]" value="<%= current_user.id %>">
+    <label>Name: </label><input type="text" name="event[name]" value="<%= @event.name %>">
+    <label>Description: </label><input type="text" name="event[description]" value="<%= @event.description %>">
+    <label>When: </label><input type="datetime-local" name="event[when]" value="<%= @event.when %>">
+    <label>Where: </label><input type="text" name="event[where]" value="<%= @event.where %>">
+    <input type="submit" value="UPDATE">
+  </form>
+
+  <form action="/events/<%= current_user.id %>" method="GET">
+    <input type="submit" value="BACK">
+  </form>
+</div>

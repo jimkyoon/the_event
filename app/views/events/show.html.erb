@@ -1,0 +1,83 @@
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAZGR5gGXpA271EV-DT6QlNS9sBOWhtSeU"></script>
+
+<div id="wrapper">
+  <div id="header">
+    <h1><%= @event.name %>!</h1>
+    <h3>Hosted by: <%= @event.user.first_name %></h3>
+  </div>
+
+  <div id="main">
+    <h3>Description:</h3>
+    <p><%= @event.description %></p>
+    <!-- display the location of party with Google Maps API -->
+    <div id="googleMap" style="width: 500px; height:380px; border 3px solid black;"></div>
+
+    <h3>Where:</h3>
+    <p><%= @event.where %></p>
+
+    <h3>When:</h3>
+    <p><%= @event.when.strftime "%b/%-d/%Y %l:%M %p" %></p>
+
+    <h3>Attendees:</h3>
+    <% attendees.each do |a| %>
+    <p><%= a.first_name %> <%= a.last_name %> <%= a.email %></p>
+    <% end %>
+
+    <h3>Items Needed:</h3>
+    <% if @item %>
+    <% @item.each do |i| %>
+    <div class="items">
+      <!-- if there are items, display them -->
+      <p><%= i.item %></p>
+      <!-- show items that the user is not bringing -->
+      <% if i.user_id != current_user.id && i.status == 0 %>
+      <form action="/bring/<%= i.id %>" method="POST">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="_method" value="patch">
+        <input type="hidden" name="item[status]" value="1">
+        <input type="hidden" name="item[user_id]" value="<%= current_user.id %>">
+        <input type="hidden" name="item[event_id]" value="<%= @event.id %>">
+        <input type="submit" value="I'll bring it!">
+      </form>
+      <% end %>
+      <!-- show items that the user is bringing to this party -->
+      <% if i.user_id == curent_user.id && i.status == 1 %>
+      <p>You're bringing it!</p>
+      <% end %>
+    </div>
+    <% end %>
+    <% end %>
+  </div>
+
+  <!-- update RSVP of user to party -->
+  <form action="/rsvp/<%= @event.id %>" method="POST">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="attendee[event_id]" value="<%= @event.id %>">
+    <input type="hidden" name="attendee[user_id]" value="<%= current_user.id %>">
+    <input type="submit" value="RSVP">
+  </form>
+
+  <form action="/events/<%= current_user.id %>" method="GET">
+    <input type="submit" value="BACK">
+  </form>
+</div>
+
+<!-- Google Maps API -->
+<script>
+  var myCenter = new google.maps.LatLng(<%= @event.latitude %>, <%= @event.longitude %>);
+  var marker;
+  function initialize(){
+    var mapProp = {
+      center: myCenter,
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    var marker = new google.maps.Marker({
+      position: myCenter,
+      animation: google.maps.Animation.BOUNCE
+    });
+    marker.setMap(map);
+  }
+  google.maps.event.addDomListener(window, 'load', initalize);
+</script>

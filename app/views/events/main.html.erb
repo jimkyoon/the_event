@@ -48,14 +48,6 @@
 
     <!-- Google Maps API -->
     <div id="map" style="width: 995px; height: 400px; border: 3px solid black; opacity: 1; filter: alpha(opacity=100);"></div>
-    <script type="text/javascript">
-      handler = Gmaps.build('Google');
-      handler.buildMap({provider: {}, internal:{id: 'map'}}, function(){
-        markers = handler.addMarkers(<%=raw_@hash.to_json%>);
-        handler.bounds.extendWith(markers);
-        handler.fitMapToBounds();
-      });
-    </script>
 
     <h3>Events You're Hosting</h3>
     <table>
@@ -85,3 +77,13 @@
     </table>
   </div>
 </div>
+
+<!-- Google Maps API -->
+<script type="text/javascript">
+  handler = Gmaps.build('Google');
+  handler.buildMap({provider: {}, internal:{id: 'map'}}, function(){
+    markers = handler.addMarkers(<%=raw_@hash.to_json%>);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  });
+</script>

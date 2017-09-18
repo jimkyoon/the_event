@@ -1,0 +1,20 @@
+<div id="wrapper">
+  <h2>Add Items</h2>
+  <div id="items">
+    <h3>Items:</h3>
+    <!-- display each item -->
+    <% @item.each do |i| %>
+    <p><%= i.item %></p>
+    <% end %>
+    <form action="/items" method="POST">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="item[user_id]" value="<%= current_user.id %>">
+      <input type="hidden" name="item[event_id]" value="<%= @itemevent %>">
+      <input type="hidden" name="item[status]" value="0">
+      <label>Item:</label><input type="text" name="item[item]">
+      <input type="button" value="ADD">
+    </form>
+  </div>
+
+  <a href="/events/<%= current_user.id %>">DONE</a>
+</div>
