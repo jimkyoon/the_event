@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :user
   has_many :attendees
-  has_many :items
+  has_many :items, dependent: :destroy
   has_many :comments
 
   validates :name, :description, :when, :where, presence:true
@@ -10,7 +10,7 @@ class Event < ActiveRecord::Base
   geocoded_by :where
   after_validation :geocode
 
-  #grab how many attendees are at this event 
+  #grab how many attendees are at this event
   def attendee_count
     self.attendees.count
   end
